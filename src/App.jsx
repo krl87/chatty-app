@@ -21,7 +21,7 @@ class App extends Component {
             content: "Anonymous1 changed their name to nomnom",
           },
           {
-            key: 3,
+            key: 123,
             type: "incomingMessage",
             content: "I wouldn't want to download Kraft Dinner. I'd be scared of cheese packet loss.",
             username: "Anonymous2"
@@ -58,6 +58,7 @@ class App extends Component {
     console.log("what is this event?", e);
     if (e.keyCode === 13 && e.target.value.length > 0) {
       let newMessage = {
+        key: Math.floor(Math.random() * 4500),
         username: this.state.currentUser,
         content: e.target.value
       }
@@ -68,14 +69,21 @@ class App extends Component {
 
   componentDidMount() {
     console.log("componentDidMount <App />");
+
+    const socket = new WebSocket('ws://localhost:3001');
+    socket.onopen = () => {
+      console.log("Connected to the server");
+    };
+
     setTimeout(() => {
       console.log("Simulating incoming message");
       // Add a new message to the list of messages in the data store
-      const newMessage = {id: 3, username: "Michelle", content: "Hello there!"};
+      const newMessage = {key: 3, username: "Michelle", content: "Hello there!"};
       const messages = this.state.messages.concat(newMessage)
       // Update the state of the app component.
       // Calling setState will trigger a call to render() in App and all child components.
       this.setState({messages: messages})
+
     }, 3000);
   }
 
