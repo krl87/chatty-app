@@ -52,6 +52,20 @@ class App extends Component {
         ]
       }
   }
+
+  messageSend = (e) => {
+    // e.preventDefault();
+    console.log("what is this event?", e);
+    if (e.keyCode === 13 && e.target.value.length > 0) {
+      let newMessage = {
+        username: this.state.currentUser,
+        content: e.target.value
+      }
+      const messages = this.state.messages.concat(newMessage)
+      this.setState({messages: messages})
+    }
+  }
+
   componentDidMount() {
     console.log("componentDidMount <App />");
     setTimeout(() => {
@@ -64,6 +78,7 @@ class App extends Component {
       this.setState({messages: messages})
     }, 3000);
   }
+
   render() {
     return (
       <div>
@@ -71,7 +86,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList msg = {this.state.messages}/>
-        <ChatBar ign = {this.state.currentUser}/>
+        <ChatBar ign = {this.state.currentUser} newMessage = {this.messageSend}/>
       </div>
     );
   }
