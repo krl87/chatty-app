@@ -22,6 +22,18 @@ class App extends Component {
     }
   }
 
+  usernameUpdate = (e) => {
+    // e.preventDefault();
+    if (e.keyCode === 13 && e.target.value.length > 0) {
+      let newUsername = {
+        username: e.target.value
+      }
+      this.setState({
+        currentUser: newUsername.username
+      });
+    }
+  }
+
   componentDidMount() {
     // console.log("componentDidMount <App />");
     const socket = new WebSocket('ws://localhost:3001');
@@ -51,7 +63,7 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList msg = {this.state.messages}/>
-        <ChatBar ign = {this.state.currentUser} newMessage = {this.messageSend}/>
+        <ChatBar newUsername = {this.usernameUpdate} newMessage = {this.messageSend}/>
       </div>
     );
   }
