@@ -73,6 +73,17 @@
       position: fixed;
       right: 0;
       top: 0;
+      display: flex;
+      align-items: center;
+    }
+
+    .navFlex {
+      margin-left: auto;
+    }
+
+    .countColor {
+      font-weight: 600;
+      color: white;
     }
 
     .navbar-brand {

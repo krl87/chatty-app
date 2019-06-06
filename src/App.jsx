@@ -7,7 +7,8 @@ class App extends Component {
     super(props);
     this.state = {
         currentUser: "Bob", // optional. if currentUser is not defined, it means the user is Anonymous
-        messages: []
+        messages: [],
+        userCount: 0
       };
   }
 
@@ -37,6 +38,15 @@ class App extends Component {
     }
   }
 
+  setUserCount = (e) => {
+   if (e.type === "onlineUsers") {
+    this.setState({
+      userCount: e.userCount
+    });
+   }
+  }
+
+
   componentDidMount() {
     // console.log("componentDidMount <App />");
     const socket = new WebSocket('ws://localhost:3001');
@@ -47,12 +57,16 @@ class App extends Component {
     };
 
     socket.onmessage = (e) => {
+      //console.log("this is e", e);
       const data = JSON.parse(e.data)
       const newMessage = {
         id: data.id,
         username: data.username,
         content: data.content,
         type: data.type
+      }
+      if (data.type === "onlineUsers") {
+        this.setUserCount(data);
       }
       this.setState({
         messages: this.state.messages.concat([newMessage])
@@ -65,6 +79,7 @@ class App extends Component {
       <div>
         <nav className="navbar">
           <a href="/" className="navbar-brand">Chatty</a>
+          <div className="navFlex"><span className="countColor">{this.state.userCount}</span> users online</div>
         </nav>
         <MessageList msg = {this.state.messages}/>
         <ChatBar currentUser = {this.state.currentUser} newUsername = {this.usernameUpdate} newMessage = {this.messageSend} />
