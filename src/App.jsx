@@ -15,6 +15,7 @@ class App extends Component {
     // e.preventDefault();
     if (e.keyCode === 13 && e.target.value.length > 0) {
       let newMessage = {
+        type: "postMessage",
         username: this.state.currentUser,
         content: e.target.value
       }
@@ -26,11 +27,13 @@ class App extends Component {
     // e.preventDefault();
     if (e.keyCode === 13 && e.target.value.length > 0) {
       let newUsername = {
-        username: e.target.value
+        type: "postNotification",
+        content: `${this.state.currentUser} has changed their name to ${e.target.value}`
       }
       this.setState({
-        currentUser: newUsername.username
+        currentUser: e.target.value
       });
+      this.state.socket.send(JSON.stringify(newUsername));
     }
   }
 
@@ -40,7 +43,7 @@ class App extends Component {
     this.socket = socket;
     this.setState({socket});
     socket.onopen = () => {
-      console.log("Connected to the server");
+      console.log("Connected to the server")
     };
 
     socket.onmessage = (e) => {
@@ -48,7 +51,8 @@ class App extends Component {
       const newMessage = {
         id: data.id,
         username: data.username,
-        content: data.content
+        content: data.content,
+        type: data.type
       }
       this.setState({
         messages: this.state.messages.concat([newMessage])
@@ -63,9 +67,9 @@ class App extends Component {
           <a href="/" className="navbar-brand">Chatty</a>
         </nav>
         <MessageList msg = {this.state.messages}/>
-        <ChatBar newUsername = {this.usernameUpdate} newMessage = {this.messageSend}/>
+        <ChatBar currentUser = {this.state.currentUser} newUsername = {this.usernameUpdate} newMessage = {this.messageSend} />
       </div>
-    );
+    )
   }
 }
 export default App;
