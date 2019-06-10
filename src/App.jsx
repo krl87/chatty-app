@@ -6,14 +6,13 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentUser: "Anonymous", // optional. if currentUser is not defined, it means the user is Anonymous
+      currentUser: "Anonymous",
       messages: [],
       userCount: 0
     };
   }
-
+//check for value in input and update message state with value on enter
   messageSend = (e) => {
-    e.preventDefault();
     if (e.keyCode === 13 && e.target.value.length > 0) {
       let newMessage = {
         type: "postMessage",
@@ -21,12 +20,13 @@ class App extends Component {
         content: e.target.value
       }
       this.socket.send(JSON.stringify(newMessage));
+      e.target.value = " ";
     }
   }
 
+//check for value in input and update currentUser state with value on enter
   usernameUpdate = (e) => {
-    e.preventDefault();
-    if (e.keyCode === 13 && e.target.value.length > 0) {
+    if (e.target.value.length > 0) {
       let newUsername = {
         type: "postNotification",
         content: `${this.state.currentUser} has changed their name to ${e.target.value}`
@@ -38,6 +38,7 @@ class App extends Component {
     }
   }
 
+//update userCount state
   setUserCount = (e) => {
    if (e.type === "onlineUsers") {
     this.setState({
@@ -46,6 +47,7 @@ class App extends Component {
    }
   }
 
+// socket connection
   componentDidMount() {
     const socket = new WebSocket('ws://localhost:3001');
     this.socket = socket;
