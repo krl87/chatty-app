@@ -6,14 +6,14 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        currentUser: "Bob", // optional. if currentUser is not defined, it means the user is Anonymous
-        messages: [],
-        userCount: 0
-      };
+      currentUser: "Anonymous", // optional. if currentUser is not defined, it means the user is Anonymous
+      messages: [],
+      userCount: 0
+    };
   }
 
   messageSend = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     if (e.keyCode === 13 && e.target.value.length > 0) {
       let newMessage = {
         type: "postMessage",
@@ -25,7 +25,7 @@ class App extends Component {
   }
 
   usernameUpdate = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     if (e.keyCode === 13 && e.target.value.length > 0) {
       let newUsername = {
         type: "postNotification",
@@ -46,9 +46,7 @@ class App extends Component {
    }
   }
 
-
   componentDidMount() {
-    // console.log("componentDidMount <App />");
     const socket = new WebSocket('ws://localhost:3001');
     this.socket = socket;
     this.setState({socket});
@@ -57,7 +55,6 @@ class App extends Component {
     };
 
     socket.onmessage = (e) => {
-      //console.log("this is e", e);
       const data = JSON.parse(e.data)
       const newMessage = {
         id: data.id,

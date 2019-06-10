@@ -5,7 +5,6 @@ class MessageList extends Component {
   render() {;
 
     const msgList = this.props.msg.map(message => {
-      console.log(message);
       return (<Message message = {message}/>)})
     return (
       <main className="messages">
